@@ -103,7 +103,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(37, 37, 37)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 32, Short.MAX_VALUE))
+                .addGap(0, 33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,7 +145,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
         String valor = cadastroValor.getText();
         String status = "A Venda";
         produto.setNome(nome);
-        produto.setValor(Integer.parseInt(valor));
+        produto.setValor(Double.parseDouble(valor));
         produto.setStatus(status);
         
         ProdutosDAO produtodao = new ProdutosDAO();
