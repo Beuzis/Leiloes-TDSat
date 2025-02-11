@@ -13,13 +13,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.SQLException;
+
 public class ProdutosDAO {
 
     Connection conn;
     PreparedStatement prep;
     ResultSet resultset;
 
-    // Método para listar os produtos
+    // Método para listar todos os produtos
     public ArrayList<ProdutosDTO> listarProdutos() {
         ArrayList<ProdutosDTO> listagem = new ArrayList<>(); // Lista de produtos
 
@@ -129,5 +130,51 @@ public class ProdutosDAO {
                 e.printStackTrace();
             }
         }
+    }
+
+    // Método para listar os produtos vendidos
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
+        ArrayList<ProdutosDTO> listagemVendidos = new ArrayList<>(); // Lista para armazenar os produtos vendidos
+
+        conn = new conectaDAO().connectDB(); // Conectar ao banco de dados
+
+        try {
+            // Query SQL para listar apenas os produtos com o status "Vendido"
+            String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+            prep = conn.prepareStatement(sql);
+            resultset = prep.executeQuery();
+
+            // Preencher a lista com os resultados
+            while (resultset.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(resultset.getInt("id"));
+                produto.setNome(resultset.getString("nome"));
+
+                // Verificando o tipo de dado e tratando para o valor
+                String valorString = resultset.getString("valor"); // Pega o valor como String
+                if (valorString != null && !valorString.isEmpty()) {
+                    produto.setValor(Double.parseDouble(valorString)); // Converte para Double
+                } else {
+                    produto.setValor(0.0); // Caso o valor seja nulo ou vazio, atribui 0.0
+                }
+
+                produto.setStatus(resultset.getString("status"));
+
+                listagemVendidos.add(produto); // Adiciona o produto à lista de vendidos
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // Fechar a conexão
+                if (resultset != null) resultset.close();
+                if (prep != null) prep.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return listagemVendidos; // Retorna a lista com todos os produtos vendidos
     }
 }
