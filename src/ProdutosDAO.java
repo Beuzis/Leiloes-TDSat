@@ -27,7 +27,7 @@ public class ProdutosDAO {
         conn = new conectaDAO().connectDB(); // Conectar ao banco
 
         try {
-            // Query SQL para listar os produtos
+            // Query SQL para listar todos os produtos
             String sql = "SELECT * FROM produtos";
             prep = conn.prepareStatement(sql);
             resultset = prep.executeQuery();
