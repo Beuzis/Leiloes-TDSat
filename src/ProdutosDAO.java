@@ -12,7 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
+import java.sql.SQLException;
 public class ProdutosDAO {
 
     Connection conn;
@@ -95,6 +95,37 @@ public class ProdutosDAO {
                 if (prep != null) prep.close();
                 if (conn != null) conn.close();
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Método para vender produto (alterar status para 'Vendido')
+    public void venderProduto(int idProduto) {
+        String sql = "UPDATE produtos SET status = ? WHERE id = ?"; // SQL para atualizar o status
+
+        try {
+            // Prepara a query para alterar o status do produto
+            prep = conn.prepareStatement(sql);
+            prep.setString(1, "Vendido"); // Define o status como 'Vendido'
+            prep.setInt(2, idProduto); // Define o ID do produto a ser atualizado
+
+            int rowsAffected = prep.executeUpdate(); // Executa a atualização
+
+            if (rowsAffected > 0) {
+                System.out.println("Produto vendido com sucesso!");
+            } else {
+                System.out.println("Produto não encontrado ou já vendido.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro ao vender produto: " + e.getMessage());
+        } finally {
+            try {
+                if (prep != null) prep.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
